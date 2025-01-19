@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-export default function Home() {
+function MarketingPage() {
   return (
     <div>
       <Button>click me</Button>
     </div>
   );
 }
+export default MarketingPage;
