@@ -45,15 +45,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ConvexClientProvider>
-          <ThemeProvider
+          {/* <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
             storageKey="zotion-theme-2"
-          >
-            {children}
-          </ThemeProvider>
+          > */}
+          {children}
+          {/* </ThemeProvider> */}
         </ConvexClientProvider>
       </body>
     </html>
