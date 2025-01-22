@@ -1,3 +1,4 @@
+import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import type { Metadata } from "next";
@@ -45,15 +46,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ConvexClientProvider>
-          {/* <ThemeProvider
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
             storageKey="zotion-theme-2"
-          > */}
-          {children}
-          {/* </ThemeProvider> */}
+          >
+            <Toaster position="bottom-center" />
+            {children}
+          </ThemeProvider>
         </ConvexClientProvider>
       </body>
     </html>
