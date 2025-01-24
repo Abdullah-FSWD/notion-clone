@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
+import { useUser } from "@clerk/clerk-react";
+import { toast } from "sonner";
 
 import {
   ChevronDown,
@@ -16,14 +18,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
-import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 type ItemProps = {
   id?: Id<"documents">;
@@ -49,8 +50,26 @@ export function Item({
   id,
   level = 0,
 }: ItemProps) {
+  const { user } = useUser();
   const router = useRouter();
   const create = useMutation(api.documents.create);
+
+  const archive = useMutation(api.documents.archive);
+
+  function onArchive(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    event.stopPropagation();
+    if (!id) {
+      return;
+    }
+    const promise = archive({ id });
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note",
+    });
+  }
+
   function handleExpand(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
     onExpand?.();
@@ -132,11 +151,14 @@ export function Item({
               side="right"
               forceMount
             >
-              <DropdownMenuItem onClick={() => {}}>
+              <DropdownMenuItem onClick={onArchive}>
                 <Trash className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              <div className="text-xs text-muted-foreground p-2">
+                Last edited by: {user?.fullName}
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
           <div
