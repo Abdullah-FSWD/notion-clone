@@ -1,15 +1,15 @@
 "use client";
-
-import { useState } from "react";
-import { useMutation, useQuery } from "convex/react";
+import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useQuery, useMutation } from "convex/react";
 import { Search, Trash, Undo } from "lucide-react";
+import { toast } from "sonner";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Spinner } from "@/components/spinner";
 import { Input } from "@/components/ui/input";
+import { ConfirmModal } from "@/components/modals/confirm-modal";
 
 export function TrashBox() {
   const router = useRouter();
@@ -21,43 +21,44 @@ export function TrashBox() {
   const [search, setSearch] = useState("");
 
   const filteredDocuments = documents?.filter((document) => {
-    return document.title.toLowerCase().includes(search.toLowerCase());
+    return document.title.toLowerCase().includes(search.toLocaleLowerCase());
   });
 
-  function onClick(documentId: string) {
+  const onClick = (documentId: string) => {
     router.push(`/documents/${documentId}`);
-  }
+  };
 
-  function onRestore(
+  const onRestore = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     documentId: Id<"documents">
-  ) {
+  ) => {
     event.stopPropagation();
+
     const promise = restore({ id: documentId });
 
     toast.promise(promise, {
       loading: "Restoring note...",
-      success: "Note restored",
-      error: "Failed to restore note.",
+      success: "Note restored!",
+      error: "Failed to restore note",
     });
-  }
+  };
 
-  function onRemove(documentId: Id<"documents">) {
+  const onRemove = (documentId: Id<"documents">) => {
     const promise = remove({ id: documentId });
 
     toast.promise(promise, {
       loading: "Deleting note...",
-      success: "Note deleted",
-      error: "Failed to delete note.",
+      success: "Note deleted!",
+      error: "Failed to delete note",
     });
     if (params.documentId === documentId) {
       router.push("/documents");
     }
-  }
+  };
 
   if (documents === undefined) {
     return (
-      <div className="h-full flex items-center justify-center p-4">
+      <div className="flex h-full items-center justify-center p-4">
         <Spinner size="lg" />
       </div>
     );
@@ -66,12 +67,12 @@ export function TrashBox() {
   return (
     <div className="text-sm">
       <div className="flex items-center gap-x-1 p-2">
-        <Search className="h-4 w-4" />
+        <Search className="w-4 h-4" />
         <Input
+          className="h-7 px-2 focus-visible:ring-transparent bg-secondary"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-7 px-2 focus-visible:ring-transparent bg-secondary"
-          placeholder="Filter by page title"
+          placeholder="Filter by page title..."
         />
       </div>
       <div className="mt-2 px-1 pb-1">
@@ -80,26 +81,29 @@ export function TrashBox() {
         </p>
         {filteredDocuments?.map((document) => (
           <div
+            className="text-sm rounded-sm w-full hover:bg-primary/5 flex justify-between items-center text-primary"
             key={document._id}
             role="button"
             onClick={() => onClick(document._id)}
-            className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
           >
             <span className="truncate pl-2">{document.title}</span>
             <div className="flex items-center">
               <div
+                className="rounded-sm p-2 hover:bg-neutral-200 
+              dark:hover:bg-neutral-600"
                 onClick={(e) => onRestore(e, document._id)}
-                role="button"
-                className="rounded-sm p-2 hover:bg-neutral-200"
               >
-                <Undo className="h-4 w-4 text-muted-foreground" />
+                <Undo className="w-4 h-4 text-muted-foreground" />
               </div>
-              <div
-                role="button"
-                className="rounded-sm p-2 hover:bg-neutral-200"
-              >
-                <Trash className="h-4 w-4 text-muted-foreground" />
-              </div>
+              <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                <div
+                  className="rounded-sm p-2 hover:bg-neutral-200
+                dark:hover:bg-neutral-600"
+                  role="button"
+                >
+                  <Trash className="w-4 h-4 text-muted-foreground" />
+                </div>
+              </ConfirmModal>
             </div>
           </div>
         ))}

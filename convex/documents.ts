@@ -182,9 +182,11 @@ export const remove = mutation({
     if (!identity) {
       throw new Error("Not authenticated");
     }
+
     const userId = identity.subject;
 
     const existingDocument = await ctx.db.get(args.id);
+
     if (!existingDocument) {
       throw new Error("Not found");
     }
