@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { File } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useQuery } from "convex/react";
+import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/clerk-react";
 
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -17,8 +15,9 @@ import {
 } from "@/components/ui/command";
 import { useSearch } from "@/hooks/use-search";
 import { api } from "@/convex/_generated/api";
+import { useEffect, useState } from "react";
 
-export const SearchCommand = () => {
+export function SearchCommand() {
   const { user } = useUser();
   const router = useRouter();
   const documents = useQuery(api.documents.getSearch);
@@ -43,18 +42,18 @@ export const SearchCommand = () => {
     return () => document.removeEventListener("keydown", down);
   }, [toggle]);
 
-  function onSelect(id: string) {
+  const onSelect = (id: string) => {
     router.push(`/documents/${id}`);
     onClose();
-  }
+  };
 
   if (!isMounted) {
     return null;
   }
 
   return (
-    <CommandDialog>
-      <CommandInput placeholder={`Search ${user?.fullName}'s Zotion...`} />
+    <CommandDialog open={isOpen} onOpenChange={onClose}>
+      <CommandInput placeholder={`Search ${user?.fullName}'s Zotion`} />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Documents">
@@ -73,9 +72,8 @@ export const SearchCommand = () => {
               <span>{document.title}</span>
             </CommandItem>
           ))}
-          <span>{document.title}</span>
         </CommandGroup>
       </CommandList>
     </CommandDialog>
   );
-};
+}
