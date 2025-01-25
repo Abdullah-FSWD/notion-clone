@@ -35,7 +35,7 @@ type ItemProps = {
   onExpand?: () => void;
   level?: number;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   icon: LucideIcon;
 };
 export function Item({
