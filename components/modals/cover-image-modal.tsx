@@ -26,7 +26,7 @@ export function CoverImageMoal() {
   function onClose() {
     setFile(undefined);
     setIsSubmitting(false);
-    coverImage.onClose;
+    coverImage.onClose();
   }
 
   async function onChange(file?: File) {

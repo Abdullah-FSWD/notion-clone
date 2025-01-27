@@ -1,17 +1,13 @@
 import { create } from "zustand";
 
-type ConverImageStore = {
-  url?: string;
+type CoverImageStore = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  onReplace: (url: string) => void;
 };
 
-export const useConverImage = create<ConverImageStore>()((set) => ({
-  url: undefined,
+export const useCoverImage = create<CoverImageStore>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true, url: undefined }),
-  onClose: () => set({ isOpen: false, url: undefined }),
-  onReplace: (url: string) => set({ isOpen: true, url }),
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
 }));
