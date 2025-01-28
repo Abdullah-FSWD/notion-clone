@@ -19,7 +19,7 @@ type DocumentIdPageProps = {
 function DocumentIdPage({ params }: DocumentIdPageProps) {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
-    []
+    [],
   );
   const document = useQuery(api.documents.getDocumentById, {
     documentId: params.documentId,
