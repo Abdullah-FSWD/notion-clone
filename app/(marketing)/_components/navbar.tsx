@@ -20,7 +20,7 @@ export function Navbar() {
     <div
       className={cn(
         `z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 flex items-center w-full p-6`,
-        scrolled && "border-b shadow-sm",
+        scrolled && "border-b shadow-sm"
       )}
     >
       <Logo />
@@ -34,14 +34,14 @@ export function Navbar() {
               </Button>
             </SignInButton>
             <SignInButton mode="modal">
-              <Button size="sm">Get Joshion free</Button>
+              <Button size="sm">Get Zoshion free</Button>
             </SignInButton>
           </>
         )}
         {isAuthenticated && !isLoading && (
           <>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/documents">Enter Jotion</Link>
+              <Link href="/documents">Enter Zotion</Link>
             </Button>
             <UserButton afterSignOutUrl="/" />
           </>
