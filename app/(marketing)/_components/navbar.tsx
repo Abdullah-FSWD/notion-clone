@@ -34,7 +34,7 @@ export function Navbar() {
               </Button>
             </SignInButton>
             <SignInButton mode="modal">
-              <Button size="sm">Get Zoshion free</Button>
+              <Button size="sm">Get Zotion free</Button>
             </SignInButton>
           </>
         )}
