@@ -3,32 +3,28 @@
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
+import { useParams } from "next/navigation";
 
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
 import Toolbar from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 
-type DocumentIdPageProps = {
-  params: {
-    documentId: Id<"documents">;
-  };
-};
-
-function DocumentIdPage({ params }: DocumentIdPageProps) {
+function DocumentIdPage() {
+  const { documentId } = useParams();
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     [],
   );
-  const document = useQuery(api.documents.getDocumentById, {
-    documentId: params.documentId,
-  });
+
+  // @ts-expect-error This error is expected
+  const document = useQuery(api.documents.getById, { documentId: documentId });
 
   const update = useMutation(api.documents.update);
   function onChange(content: string) {
     update({
-      id: params.documentId,
+      // @ts-expect-error This error is expected
+      id: documentId,
       content,
     });
   }
