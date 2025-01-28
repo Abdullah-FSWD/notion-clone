@@ -17,7 +17,8 @@ const spinnerVariants = cva("text-muted-foreground animate-spin", {
   },
 });
 
-interface SpinnerProps extends VariantProps<typeof spinnerVariants> {}
+// @typescript-eslint/no-empty-object-type
+type SpinnerProps = VariantProps<typeof spinnerVariants>;
 
 export const Spinner = ({ size }: SpinnerProps) => {
   return <Loader className={cn(spinnerVariants({ size }))} />;
