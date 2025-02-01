@@ -17,8 +17,10 @@ function DocumentIdPage() {
     [],
   );
 
-  // @ts-expect-error This error is expected
-  const document = useQuery(api.documents.getById, { documentId: documentId });
+  const document = useQuery(api.documents.getDocumentById, {
+    // @ts-expect-error This error is expected
+    documentId: documentId,
+  });
 
   const update = useMutation(api.documents.update);
   function onChange(content: string) {
